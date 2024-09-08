@@ -1,8 +1,9 @@
 "use client";
 
-import { Button, Col, Row, Select } from "antd";
+import { Button, Col, Row, Select, Space } from "antd";
 import { createStyles } from "antd-style";
 import Title from "antd/es/typography/Title";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const useStyle = createStyles(({ css }) => ({
@@ -120,6 +121,7 @@ const useStyle = createStyles(({ css }) => ({
 
 const Page = () => {
   const { styles } = useStyle();
+  const router = useRouter();
   const [position, setPosition] = useState(false);
   const [array, setArray] = useState<string[]>([
     styles.square,
@@ -192,16 +194,22 @@ const Page = () => {
     <div className={styles.div}>
       <Row style={{ padding: 16 }} justify={"space-between"}>
         <Title level={2}>Layout & Style</Title>
-        <Select
-          defaultValue="en"
-          style={{ width: 120 }}
-          onChange={handleTranslate}
-          options={[
-            { value: "en", label: "EN" },
-            { value: "th", label: "TH" },
-          ]}
-        ></Select>
+        <Col>
+          <Space>
+            <Select
+              defaultValue="en"
+              style={{ width: 120 }}
+              onChange={handleTranslate}
+              options={[
+                { value: "en", label: "EN" },
+                { value: "th", label: "TH" },
+              ]}
+            ></Select>
+            <Button onClick={() => router.push("/")}>Home</Button>
+          </Space>
+        </Col>
       </Row>
+
       <Row justify={"center"}>
         <Col style={{ width: "70%" }}>
           <Row style={{ marginBottom: 48 }} gutter={12}>

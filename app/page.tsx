@@ -33,7 +33,6 @@ const Home = () => {
           className={styles.button}
           onClick={() => router.push("/test-02")}
         >
-          {" "}
           Test 02
         </Button>
       </Space>
