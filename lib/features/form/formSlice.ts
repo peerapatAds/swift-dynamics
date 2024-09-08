@@ -31,6 +31,7 @@ const formSlice = createSlice({
     formAdd(state, action) {
       state.data.push({ ...action.payload, id: uuidv4() });
       localStorage.setItem("dataList", JSON.stringify(state.data));
+      state.selectedData = {} as FieldType;
     },
     setFormByLocalStore: (state, action) => {
       state.data = action.payload;
@@ -41,6 +42,7 @@ const formSlice = createSlice({
       );
       state.data[index] = action.payload;
       localStorage.setItem("dataList", JSON.stringify(state.data));
+      state.selectedData = {} as FieldType;
     },
     deleteFormById(state, action) {
       state.data = state.data.filter((item) => item.id !== action.payload);

@@ -3,6 +3,7 @@
 import { Button, Col, Row, Select, Space } from "antd";
 import { createStyles } from "antd-style";
 import Title from "antd/es/typography/Title";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
@@ -11,45 +12,35 @@ const useStyle = createStyles(({ css }) => ({
     width: 100vw;
     height: 100vh;
   `,
+  buttonChip: css`
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0px 15px;
+    border-radius: 10px;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    border-color: none;
+    background: rgb(110, 218, 120);
+  `,
   button: css`
     width: 100%;
+    min-width: 250px;
     height: 150px;
     position: relative;
-    &::before {
-      content: "Move Shape";
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 0px 15px;
-      border-radius: 10px;
-      color: white;
-      font-size: 12px;
-      font-weight: 700;
-      background: rgb(110, 218, 120);
-    }
   `,
   button2: css`
     width: 100%;
+    min-width: 250px;
     height: 150px;
     justify-content: space-around;
     position: relative;
-    &::before {
-      content: "Move Position";
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 0px 15px;
-      border-radius: 10px;
-      color: white;
-      font-size: 12px;
-      font-weight: 700;
-      background: rgb(110, 218, 120);
-    }
   `,
   button3: css`
     width: 100%;
+    min-width: 250px;
     height: 150px;
     position: relative;
   `,
@@ -119,9 +110,15 @@ const useStyle = createStyles(({ css }) => ({
   `,
 }));
 
-const Page = () => {
+type Props = {
+  params: { locale: string };
+};
+
+const Page = ({ params: { locale } }: Props) => {
   const { styles } = useStyle();
   const router = useRouter();
+  const t = useTranslations("Test01");
+  const tc = useTranslations("Common");
   const [position, setPosition] = useState(false);
   const [array, setArray] = useState<string[]>([
     styles.square,
@@ -133,7 +130,7 @@ const Page = () => {
   ]);
 
   function handleTranslate(value: string) {
-    console.log(`selected ${value}`);
+    router.replace(`/${value}/test-01`);
   }
 
   function handleLeft() {
@@ -193,19 +190,21 @@ const Page = () => {
   return (
     <div className={styles.div}>
       <Row style={{ padding: 16 }} justify={"space-between"}>
-        <Title level={2}>Layout & Style</Title>
+        <Title level={2}>{t("title")}</Title>
         <Col>
           <Space>
             <Select
-              defaultValue="en"
+              defaultValue={locale}
               style={{ width: 120 }}
               onChange={handleTranslate}
               options={[
-                { value: "en", label: "EN" },
-                { value: "th", label: "TH" },
+                { value: "en", label: tc("en") },
+                { value: "th", label: tc("th") },
               ]}
             ></Select>
-            <Button onClick={() => router.push("/")}>Home</Button>
+            <Button onClick={() => router.replace(`/${locale}/`)}>
+              {tc("home")}
+            </Button>
           </Space>
         </Col>
       </Row>
@@ -219,6 +218,7 @@ const Page = () => {
                 className={styles.button}
                 onClick={() => handleLeft()}
               >
+                <div className={styles.buttonChip}>{t("moveShape")}</div>
                 <div className={styles.triangleLeft}></div>
               </Button>
             </Col>
@@ -228,6 +228,7 @@ const Page = () => {
                 className={styles.button2}
                 onClick={() => handlePosition()}
               >
+                <div className={styles.buttonChip}>{t("movePosition")}</div>
                 <div className={styles.triangleUp}></div>
                 <div className={styles.triangleDown}></div>
               </Button>
@@ -238,6 +239,7 @@ const Page = () => {
                 className={styles.button}
                 onClick={() => handleRight()}
               >
+                <div className={styles.buttonChip}>{t("moveShape")}</div>
                 <div className={styles.triangleRight}></div>
               </Button>
             </Col>

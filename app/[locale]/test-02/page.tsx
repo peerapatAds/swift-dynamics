@@ -33,6 +33,7 @@ import dayjs from "dayjs";
 
 import React, { Key, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslations } from "next-intl";
 
 const useStyle = createStyles(({ css }) => ({
   div: css`
@@ -53,13 +54,20 @@ type FieldType = {
   mobilePhone: string;
   passportNo?: string;
   expectedSalary: string;
+  prefix?: string;
 };
 
-const Page = () => {
+type Props = {
+  params: { locale: string };
+};
+
+const Page = ({ params: { locale } }: Props) => {
   const { styles } = useStyle();
   const router = useRouter();
   const [form] = Form.useForm();
   const dispatch = useDispatch();
+  const t = useTranslations("Test02");
+  const tc = useTranslations("Common");
   const [citizenId, setCitizenId] = useState(["", "", "", "", ""]);
   const [prefix, setPrefix] = useState("");
   const selectDataStore = useSelector(selectedData);
@@ -75,7 +83,7 @@ const Page = () => {
   }, [selectDataStore]);
 
   function handleTranslate(value: string) {
-    console.log(`selected ${value}`);
+    router.replace(`/${value}/test-02`);
   }
 
   const setDataList = () => {
@@ -134,11 +142,11 @@ const Page = () => {
   const onDelete = (id?: string) => {
     if (id && selectedRowKeys.length <= 1) {
       dispatch(deleteFormById(id));
-      alert("Delete Success");
+      alert(t("deleteSuccess"));
     }
     if (!id && selectedRowKeys.length) {
       dispatch(deleteFormBySelect(selectedRowKeys));
-      alert("Delete Success");
+      alert(t("deleteSuccess"));
     }
   };
 
@@ -166,7 +174,7 @@ const Page = () => {
           mobilePhone: fullMobilePhone,
         })
       );
-      alert("Save Success");
+      alert(t("saveSuccess"));
     } else {
       dispatch(
         formAdd({
@@ -176,7 +184,7 @@ const Page = () => {
           mobilePhone: fullMobilePhone,
         })
       );
-      alert("Save Success");
+      alert(t("saveSuccess"));
     }
     onReset();
     setDataList();
@@ -210,50 +218,52 @@ const Page = () => {
 
   const columns = [
     {
-      title: "Name",
+      title: t("name"),
       render: (_: FieldType, record: FieldType) => (
         <Space size="middle">
-          <Text>{record.title === "mr" ? "Mr." : "Ms."}</Text>
+          <Text>{record.title === "mr" ? t("mr") : t("ms")}</Text>
           <Text>{record.firstname}</Text>
           <Text>{record.lastname}</Text>
         </Space>
       ),
     },
     {
-      title: "Gender",
+      title: t("gender"),
       render: (_: FieldType, record: FieldType) => (
         <Space size="middle">
           <Text>
             {record.gender === "male"
-              ? "Male"
+              ? t("male")
               : record.gender === "female"
-              ? "Female"
-              : "Unisex"}
+              ? t("female")
+              : t("unisex")}
           </Text>
         </Space>
       ),
     },
     {
-      title: "Mobile Phone",
+      title: t("mobilePhone"),
       dataIndex: "mobilePhone",
     },
     {
-      title: "Nationality",
+      title: t("nationality"),
       render: (_: FieldType, record: FieldType) => (
         <Space size="middle">
-          <Text>{record.nationality === "thai" ? "Thai" : "Myanmar"}</Text>
+          <Text>
+            {record.nationality === "thai" ? t("thai") : t("myanmar")}
+          </Text>
         </Space>
       ),
     },
     {
-      title: "Manage",
+      title: t("manage"),
       render: (_: FieldType, record: FieldType) => (
         <Space size="middle">
           <Button type="text" onClick={() => onEdit(record.id)}>
-            Edit
+            {t("edit")}
           </Button>
           <Button type="text" onClick={() => onDelete(record.id)}>
-            Delete
+            {t("delete")}
           </Button>
         </Space>
       ),
@@ -281,26 +291,28 @@ const Page = () => {
   return (
     <div className={styles.div}>
       <Row style={{ padding: 16 }} justify={"space-between"}>
-        <Title level={2}>Form & Table</Title>
+        <Title level={2}>{t("title")}</Title>
         <Col>
           <Space>
             <Select
-              defaultValue="en"
+              defaultValue={locale}
               style={{ width: 120 }}
               onChange={handleTranslate}
               options={[
-                { value: "en", label: "EN" },
-                { value: "th", label: "TH" },
+                { value: "en", label: tc("en") },
+                { value: "th", label: tc("th") },
               ]}
             ></Select>
-            <Button onClick={() => router.push("/")}>Home</Button>
+            <Button onClick={() => router.push(`/${locale}/`)}>
+              {tc("home")}
+            </Button>
           </Space>
         </Col>
       </Row>
       <Row justify={"center"}>
         <Col
           style={{ border: "1px solid #000", borderRadius: 10, padding: 16 }}
-          span={15}
+          span={17}
         >
           <Form
             name="basic"
@@ -311,40 +323,49 @@ const Page = () => {
             autoComplete="off"
           >
             <Row id="row1" gutter={16}>
-              <Col span={4}>
+              <Col span={5}>
                 <Form.Item<FieldType>
-                  label="Title"
+                  label={t("titleName")}
                   name="title"
                   rules={[
-                    { required: true, message: "Please input your Title!" },
+                    {
+                      required: true,
+                      message: `${t("pleaseInput")} ${t("titleName")}!`,
+                    },
                   ]}
                 >
                   <Select
-                    placeholder="Title"
+                    placeholder={t("titleName")}
                     options={[
-                      { value: "mr", label: "Mr." },
-                      { value: "ms", label: "Ms." },
+                      { value: "mr", label: t("mr") },
+                      { value: "ms", label: t("ms") },
                     ]}
                   ></Select>
                 </Form.Item>
               </Col>
-              <Col span={10}>
+              <Col span={9}>
                 <Form.Item<FieldType>
-                  label="Firstname"
+                  label={t("firstname")}
                   name="firstname"
                   rules={[
-                    { required: true, message: "Please input your Firstname!" },
+                    {
+                      required: true,
+                      message: `${t("pleaseInput")} ${t("firstname")}!`,
+                    },
                   ]}
                 >
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={10}>
+              <Col span={9}>
                 <Form.Item<FieldType>
-                  label="Lastname"
+                  label={t("lastname")}
                   name="lastname"
                   rules={[
-                    { required: true, message: "Please input your Lastname!" },
+                    {
+                      required: true,
+                      message: `${t("pleaseInput")} ${t("lastname")}!`,
+                    },
                   ]}
                 >
                   <Input />
@@ -354,34 +375,41 @@ const Page = () => {
             <Row id="row2" gutter={16}>
               <Col span={6}>
                 <Form.Item<FieldType>
-                  label="Birthday"
+                  label={t("birthday")}
                   name="birthday"
                   rules={[
-                    { required: true, message: "Please input your Birthday!" },
+                    {
+                      required: true,
+                      message: `${t("pleaseInput")} ${t("birthday")}!`,
+                    },
                   ]}
                   getValueProps={(value) => ({
                     value: value && dayjs(value),
                   })}
                 >
-                  <DatePicker placeholder="YYYY-MM-DD" format={"YYYY-MM-DD"} />
+                  <DatePicker
+                    style={{ width: "100%" }}
+                    placeholder="YYYY-MM-DD"
+                    format={"YYYY-MM-DD"}
+                  />
                 </Form.Item>
               </Col>
               <Col span={10}>
                 <Form.Item<FieldType>
-                  label="Nationality"
+                  label={t("nationality")}
                   name="nationality"
                   rules={[
                     {
                       required: true,
-                      message: "Please input your Nationality!",
+                      message: `${t("pleaseInput")} ${t("nationality")}!`,
                     },
                   ]}
                 >
                   <Select
-                    placeholder="- - Please Select - -"
+                    placeholder={`"- - ${t("pleaseSelect")} - -"`}
                     options={[
-                      { value: "thai", label: "Thai" },
-                      { value: "myanmar", label: "Myanmar" },
+                      { value: "thai", label: t("thai") },
+                      { value: "myanmar", label: t("myanmar") },
                     ]}
                   ></Select>
                 </Form.Item>
@@ -389,7 +417,7 @@ const Page = () => {
             </Row>
             <Row id="row3" gutter={16}>
               <Col span={24}>
-                <Form.Item<FieldType> label="CitizenID">
+                <Form.Item<FieldType> label={t("citizenID")}>
                   <Row>
                     {citizenId.map((value, index) => (
                       <div style={{ display: "contents" }} key={index}>
@@ -455,16 +483,19 @@ const Page = () => {
             <Row id="row4" gutter={16}>
               <Col span={24}>
                 <Form.Item<FieldType>
-                  label="Gender"
+                  label={t("gender")}
                   name="gender"
                   rules={[
-                    { required: true, message: "Please input your Gender!" },
+                    {
+                      required: true,
+                      message: `${t("pleaseInput")} ${t("gender")}!`,
+                    },
                   ]}
                 >
                   <Radio.Group>
-                    <Radio value={"male"}>Male</Radio>
-                    <Radio value={"female"}>Female</Radio>
-                    <Radio value={"unisex"}>Unisex</Radio>
+                    <Radio value={"male"}>{t("male")}</Radio>
+                    <Radio value={"female"}>{t("female")}</Radio>
+                    <Radio value={"unisex"}>{t("unisex")}</Radio>
                   </Radio.Group>
                 </Form.Item>
               </Col>
@@ -474,11 +505,12 @@ const Page = () => {
                 <Row>
                   <Col span={7}>
                     <Form.Item<FieldType>
-                      label="Mobile Phone"
+                      label={t("mobilePhone")}
+                      name="prefix"
                       rules={[
                         {
                           required: true,
-                          message: "Please input your Mobile Phone!",
+                          message: `${t("pleaseInput")} ${t("mobilePhone")}!`,
                         },
                       ]}
                     >
@@ -501,7 +533,7 @@ const Page = () => {
                       rules={[
                         {
                           required: true,
-                          message: "Please input your Mobile Phone!",
+                          message: `${t("pleaseInput")} ${t("mobilePhone")}!`,
                         },
                       ]}
                     >
@@ -513,7 +545,7 @@ const Page = () => {
             </Row>
             <Row id="row6" gutter={16}>
               <Col span={10}>
-                <Form.Item<FieldType> label="Passport No" name="passportNo">
+                <Form.Item<FieldType> label={t("passportNo")} name="passportNo">
                   <Input maxLength={9} />
                 </Form.Item>
               </Col>
@@ -521,12 +553,12 @@ const Page = () => {
             <Row id="row7" gutter={16}>
               <Col span={10}>
                 <Form.Item<FieldType>
-                  label="Expected Salary"
+                  label={t("expectedSalary")}
                   name="expectedSalary"
                   rules={[
                     {
                       required: true,
-                      message: "Please input your Expected Salary!",
+                      message: `${t("pleaseInput")} ${t("expectedSalary")}!`,
                     },
                   ]}
                 >
@@ -537,12 +569,12 @@ const Page = () => {
                 <Row justify={"center"}>
                   <Col span={6}>
                     <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                      <Button onClick={onReset}>Reset</Button>
+                      <Button onClick={onReset}>{t("reset")}</Button>
                     </Form.Item>
                   </Col>
                   <Col span={6}>
                     <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                      <Button htmlType="submit">Submit</Button>
+                      <Button htmlType="submit">{t("submit")}</Button>
                     </Form.Item>
                   </Col>
                 </Row>
@@ -562,9 +594,9 @@ const Page = () => {
         <Col span={22}>
           <Space>
             <Checkbox onChange={(e) => onSelectAll(e.target.checked)}>
-              Select All
+              {t("selectAll")}
             </Checkbox>
-            <Button onClick={() => onDelete()}>Delete</Button>
+            <Button onClick={() => onDelete()}>{t("delete")}</Button>
           </Space>
         </Col>
       </Row>

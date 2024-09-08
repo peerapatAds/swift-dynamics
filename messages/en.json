@@ -1,0 +1,47 @@
+{
+  "HomePage": {
+    "test01": "Test 01",
+    "test02": "Test 02"
+  },
+  "Test01": {
+    "title": "Layout & Style",
+    "moveShape": "Move Shpare",
+    "movePosition": "Move Position"
+  },
+  "Test02": {
+    "title": "Form & Table",
+    "titleName": "Title",
+    "firstname": "Firstname",
+    "lastname": "Lastname",
+    "birthday": "Birthday",
+    "nationality": "Nationality",
+    "citizenID": "CitizenID",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "unisex": "Unisex",
+    "mobilePhone": "Mobile Phone",
+    "passportNo": "Passport No",
+    "expectedSalary": "Expected Salary",
+    "reset": "Reset",
+    "submit": "Submit",
+    "delete": "Delete",
+    "edit": "Edit",
+    "thai": "Thai",
+    "myanmar": "Myanmar",
+    "name": "Name",
+    "selectAll": "Select All",
+    "manage": "Manage",
+    "pleaseSelect": "Please Select",
+    "saveSuccess": "Save Success",
+    "deleteSuccess": "Delete Success",
+    "mr": "Mr.",
+    "ms": "Ms.",
+    "pleaseInput": "Please input your"
+  },
+  "Common": {
+    "home": "Home",
+    "en": "EN",
+    "th": "TH"
+  }
+}
