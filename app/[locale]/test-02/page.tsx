@@ -219,6 +219,8 @@ const Page = ({ params: { locale } }: Props) => {
   const columns = [
     {
       title: t("name"),
+      sorter: (a: FieldType, b: FieldType) =>
+        a.firstname.length - b.firstname.length,
       render: (_: FieldType, record: FieldType) => (
         <Space size="middle">
           <Text>{record.title === "mr" ? t("mr") : t("ms")}</Text>
@@ -229,6 +231,7 @@ const Page = ({ params: { locale } }: Props) => {
     },
     {
       title: t("gender"),
+      sorter: (a: FieldType, b: FieldType) => a.gender.length - b.gender.length,
       render: (_: FieldType, record: FieldType) => (
         <Space size="middle">
           <Text>
@@ -244,9 +247,13 @@ const Page = ({ params: { locale } }: Props) => {
     {
       title: t("mobilePhone"),
       dataIndex: "mobilePhone",
+      sorter: (a: FieldType, b: FieldType) =>
+        a.mobilePhone.length - b.mobilePhone.length,
     },
     {
       title: t("nationality"),
+      sorter: (a: FieldType, b: FieldType) =>
+        a.nationality.length - b.nationality.length,
       render: (_: FieldType, record: FieldType) => (
         <Space size="middle">
           <Text>
