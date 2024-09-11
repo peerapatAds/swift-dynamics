@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Col, Flex, Row, Select, Space } from "antd";
+import { Button, Col, Row, Select, Space } from "antd";
 import { createStyles } from "antd-style";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
